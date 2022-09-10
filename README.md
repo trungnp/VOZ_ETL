@@ -481,4 +481,11 @@ def update_date(pg_engine):
 
     print(f"Updated latest_update_date successfully!")
 ```
+#### [And Here We Are](./dags/ETL_voz.py)
+___
+This is the auto-update dashboard that all of these tasks created on Google Data Studio
+![Users](images/users.png)
+This is the Users page
+![Threads](images/threads.png)
+This is the Threads page
 
