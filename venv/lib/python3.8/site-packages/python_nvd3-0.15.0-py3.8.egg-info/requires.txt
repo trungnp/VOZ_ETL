@@ -1,2 +1,0 @@
-python-slugify>=1.2.5
-Jinja2>=2.8
