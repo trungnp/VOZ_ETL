@@ -1,6 +1,6 @@
 from configparser import ConfigParser
 
-FILE_PATH = "/Users/trungnp/Library/Mobile Documents/com~apple~CloudDocs/Study/DE/voz/conf.ini"
+FILE_PATH = "/path/to/conf.ini"
 
 
 def config(filename=FILE_PATH, section=""):
