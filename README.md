@@ -134,7 +134,7 @@ def scrape_user_tooltip_selenium(tooltip):
 
     return data
 ```
-###[Storing](src/load/load_data_to_postgresdb.py)
+### [Storing](src/load/load_data_to_postgresdb.py)
 ___
 All this raw data will be stored in 2 tables `threads` and `users` in RDS Postgresql. I establish the connection to database through the helper function [connect](src/utilities/database_utils.py).
 ```python
@@ -322,10 +322,10 @@ upload_to_s3(threads, fp_t, S3_BUCKET, S3_ACCESS_KEY, S3_SECKET_KEY)
 upload_to_s3(participants, fp_p, S3_BUCKET, S3_ACCESS_KEY, S3_SECKET_KEY)
 upload_to_s3(users, fp_u, S3_BUCKET, S3_ACCESS_KEY, S3_SECKET_KEY)
 ```
-#### Data Transformation
+#### [Data Transformation](./src/transform/transform.py)
 ___
 In this step, raw data will be pulled off from S3 Bucket and be transformed properly based on kind of data.
-##### Participants
+##### [Participants](./src/transform/transform.py)
 ___
 There is not much work to do with participants data since it is already cleaned in the scraping stage. However, not all records have participants field (not `NULL`).
 So, I have to filter out `NULL` records and then `concat` all `participants` into only one `DataFrame` along with the corresponding `thread_id`. Finally, I filter out duplicated rows then ship them back to S3 Bucket
@@ -346,7 +346,7 @@ def transform_participants(fp):
     clean_fp = fp.replace("/raw/", "/clean/")
     upload_to_s3(new_par_df, clean_fp, S3_BUCKET, S3_ACCESS_KEY, S3_SECKET_KEY)
 ```
-##### Users
+##### [Users](./src/transform/transform.py)
 ___
 What to do with `users` is almost the same with `participants`, but in instead of doing fancy things, I only replace blank `location` to `"Namek"` and nothing more since users data
 has already been deduplicated in [Storing](README.md#[Storing](./load/save_data_to_postgresdb.py)) stage.
@@ -361,7 +361,7 @@ def transform_users(fp):
     clean_fp = fp.replace("/raw/", "/clean/")
     upload_to_s3(df_users, clean_fp, S3_BUCKET, S3_ACCESS_KEY, S3_SECKET_KEY)
 ```
-##### Threads
+##### [Threads](./src/transform/transform.py)
 ___
 Raw thread data pulled off from S3 Bucket is a `.csv` file. So, I will put it into a `DataFrame` then start transforming. First, I replace `M` and `K` characters, which represents for 
 million and thousand respectively, in 2 columns `view_count` and `reply_count` to number `K = 000` and `M = 000000`. Next, I will do word-count on the `reply` field in the `participants` column. 
